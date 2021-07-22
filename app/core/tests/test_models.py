@@ -1,7 +1,18 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from core import models
+from unittest.mock import patch
 
+@patch('uuid.uuid4')
+def test_recipe_file_name_uuid(self, mock_uuid):
+    """Test that image is saved in the correct location"""
+    uuid = 'test-uuid'
+    mock_uuid.return_value = uuid
+    file_path = models.recipe_image_file_path(None, 'myimage.jpg')
+
+    exp_path = f'uploads/recipe/{uuid}.jpg'
+    self.assertEqual(file_path, exp_path)
+    
 class ModelTest(TestCase):
     def test_create_user_with_email_successful(self):
         """Test creating a new user with an email is susccessful"""
